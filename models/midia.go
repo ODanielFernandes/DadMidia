@@ -7,8 +7,8 @@ import (
 )
 
 type Midia struct {
-	ID                          int64
-	Estudante                   int64
+	Matricula                   int64
+	Nome                        string
 	StreamingFavorito           string
 	FrequenciaUsoRedesSociais   float64
 	MeioPrincipalNoticias       string
@@ -17,8 +17,8 @@ type Midia struct {
 
 func (m *Midia) Save() error {
 
-	query := `INSERT INTO midia(estudante, streaming_favorito, freq_uso_redes_sociais, meio_principal_noticias, comunicacao_digital_principal) 
-	VALUES (?, ?, ?, ?, ?);`
+	query := `INSERT INTO midia(matricula, nome, streaming_favorito, freq_uso_redes_sociais, meio_principal_noticias, comunicacao_digital_principal) 
+	VALUES (?, ?, ?, ?, ?, ?);`
 
 	stmt, err := db.DB.Prepare(query)
 
@@ -28,7 +28,8 @@ func (m *Midia) Save() error {
 
 	defer stmt.Close()
 	result, err := stmt.Exec(
-		m.Estudante,
+		m.Matricula,
+		m.Nome,
 		m.StreamingFavorito,
 		m.FrequenciaUsoRedesSociais,
 		m.MeioPrincipalNoticias,
@@ -41,15 +42,15 @@ func (m *Midia) Save() error {
 
 	id, err := result.LastInsertId()
 
-	m.ID = id
+	m.Matricula = id
 
 	return err
 }
 
-func GetAllMidias(estudante int64) ([]Midia, error) {
-	query := `SELECT * FROM Midia WHERE estudante = ?`
+func GetAllMidias(matricula int64) ([]Midia, error) {
+	query := `SELECT * FROM midia WHERE matricula = ?`
 
-	rows, err := db.DB.Query(query, estudante)
+	rows, err := db.DB.Query(query, matricula)
 
 	if err != nil {
 		fmt.Println(err)
@@ -63,8 +64,8 @@ func GetAllMidias(estudante int64) ([]Midia, error) {
 	for rows.Next() {
 		var midia Midia
 		err := rows.Scan(
-			&midia.ID,
-			&midia.Estudante,
+			&midia.Matricula,
+			&midia.Nome,
 			&midia.StreamingFavorito,
 			&midia.FrequenciaUsoRedesSociais,
 			&midia.MeioPrincipalNoticias,
@@ -83,12 +84,12 @@ func GetAllMidias(estudante int64) ([]Midia, error) {
 }
 
 func GetMidiaByID(id int64) (*Midia, error) {
-	query := `SELECT * FROM midia WHERE id_midia = ?`
+	query := `SELECT * FROM midia WHERE matricula = ?`
 
 	row := db.DB.QueryRow(query, id)
 
 	var midia Midia
-	err := row.Scan(&midia.ID, &midia.Estudante, &midia.StreamingFavorito, &midia.FrequenciaUsoRedesSociais, &midia.MeioPrincipalNoticias, &midia.ComunicacaoDigitalPrincipal)
+	err := row.Scan(&midia.Matricula, &midia.Nome, &midia.StreamingFavorito, &midia.FrequenciaUsoRedesSociais, &midia.MeioPrincipalNoticias, &midia.ComunicacaoDigitalPrincipal)
 	if err != nil {
 		fmt.Println(err)
 		return nil, err
@@ -101,7 +102,7 @@ func (m Midia) Update() error {
 	query := `
 		UPDATE midia 
 		SET streaming_favorito = ?, freq_uso_redes_sociais = ?, meio_principal_noticias = ?, comunicacao_digital_principal = ? 
-		WHERE id_midia = ?
+		WHERE matricula = ?
 	`
 
 	stmt, err := db.DB.Prepare(query)
@@ -112,14 +113,14 @@ func (m Midia) Update() error {
 
 	defer stmt.Close()
 
-	_, err = stmt.Exec(m.StreamingFavorito, m.FrequenciaUsoRedesSociais, m.MeioPrincipalNoticias, m.FrequenciaUsoRedesSociais, m.ComunicacaoDigitalPrincipal)
+	_, err = stmt.Exec(m.Nome, m.StreamingFavorito, m.FrequenciaUsoRedesSociais, m.MeioPrincipalNoticias, m.FrequenciaUsoRedesSociais, m.ComunicacaoDigitalPrincipal)
 	return err
 }
 
 func (m Midia) Delete() error {
 	query := `
 		DELETE FROM midia 
-		WHERE id_midia = ?
+		WHERE matricula = ?
 	`
 
 	stmt, err := db.DB.Prepare(query)
@@ -130,6 +131,6 @@ func (m Midia) Delete() error {
 
 	defer stmt.Close()
 
-	_, err = stmt.Exec(m.ID)
+	_, err = stmt.Exec(m.Matricula)
 	return err
 }

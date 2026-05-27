@@ -54,13 +54,13 @@ func createMidia(context *gin.Context) {
 		return
 	}
 
-	userId := context.GetInt64("userId")
+	// userId := context.GetInt64("userId")
 
-	midia.Estudante = userId
+	// midia.Estudante = userId
 	err = midia.Save()
 
 	if err != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{"message": "Could not create midia. Try again later"})
+		context.JSON(http.StatusInternalServerError, gin.H{"message": err})
 		return
 	}
 
@@ -75,19 +75,19 @@ func updateMidia(context *gin.Context) {
 		return
 	}
 
-	midia, err := models.GetMidiaByID(midiaId)
+	//midia, err := models.GetMidiaByID(midiaId)
 
-	userId := context.GetInt64("userId")
+	//userId := context.GetInt64("userId")
 
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "Could not fetch the midia."})
 		return
 	}
 
-	if midia.Estudante != userId {
-		context.JSON(http.StatusUnauthorized, gin.H{"message": "Not authorized to update midia."})
-		return
-	}
+	// if midia.Estudante != userId {
+	// 	context.JSON(http.StatusUnauthorized, gin.H{"message": "Not authorized to update midia."})
+	// 	return
+	// }
 
 	var updatedMidia models.Midia
 	err = context.ShouldBindJSON(&updatedMidia)
@@ -97,7 +97,7 @@ func updateMidia(context *gin.Context) {
 		return
 	}
 
-	updatedMidia.ID = midiaId
+	updatedMidia.Matricula = midiaId
 
 	err = updatedMidia.Update()
 
@@ -124,11 +124,11 @@ func deleteMidia(context *gin.Context) {
 		return
 	}
 
-	userId := context.GetInt64("userId")
-	if midia.Estudante != userId {
-		context.JSON(http.StatusUnauthorized, gin.H{"message": "Not authorized to delete midia."})
-		return
-	}
+	// userId := context.GetInt64("userId")
+	// if midia.Estudante != userId {
+	// 	context.JSON(http.StatusUnauthorized, gin.H{"message": "Not authorized to delete midia."})
+	// 	return
+	// }
 
 	err = midia.Delete()
 

@@ -44,15 +44,15 @@ func InitDB() {
 
 func createTables() {
 	createMidiaTable := `
-		CREATE TABLE IF NOT EXISTS Midia (
-			id_midia int auto_increment,
-			estudante INTEGER UNSIGNED NOT NULL,
+		CREATE TABLE IF NOT EXISTS midia (
+			matricula INTEGER NOT NULL,
+			nome varchar(100) not null,
 			streaming_favorito VARCHAR(25) NULL,
 			freq_uso_redes_sociais DECIMAL(4,2) NULL,
 			meio_principal_noticias VARCHAR(35) NULL,
-			comunicao_digital_principal VARCHAR(40) NULL,
-			PRIMARY KEY(id_midia),
-			INDEX Midia_FKIndex1(estudante)
+			comunicacao_digital_principal VARCHAR(40) NULL,
+			PRIMARY KEY(matricula),
+			INDEX Midia_FKIndex1(matricula)
 		)`
 
 	_, err := DB.Exec(createMidiaTable)
