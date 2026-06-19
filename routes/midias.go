@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -30,6 +31,7 @@ func getMidia(context *gin.Context) {
 	midiaId, err := strconv.ParseInt(context.Param("id"), 10, 64)
 
 	if err != nil {
+		fmt.Println(err)
 		context.JSON(http.StatusBadRequest, gin.H{"message": "Could not parse midia id."})
 		return
 	}
@@ -50,6 +52,7 @@ func createMidia(context *gin.Context) {
 	err := context.ShouldBindJSON(&midia)
 
 	if err != nil {
+		fmt.Println(err)
 		context.JSON(http.StatusBadRequest, gin.H{"message": "Could not parse data."})
 		return
 	}
@@ -60,6 +63,7 @@ func createMidia(context *gin.Context) {
 	err = midia.Save()
 
 	if err != nil {
+		fmt.Println(err)
 		context.JSON(http.StatusInternalServerError, gin.H{"message": err})
 		return
 	}
