@@ -1,6 +1,6 @@
 # DadMidia 🎬
 
-Microserviço RESTful desenvolvido em **Go** para a disciplina de **Desenvolvimento de Aplicações Distribuídas (DAD)**. A API gerencia mídias com autenticação JWT, suporte a CORS e integração com banco de dados relacional (MySQL) e não-relacional (MongoDB).
+Microserviço RESTful desenvolvido em **Go** para a disciplina de **Desenvolvimento de Aplicações Distribuídas (DAD)**. A API gerencia mídias com autenticação JWT, suporte a CORS e integração com banco de dados relacional (MySQL).
 
 ---
 
